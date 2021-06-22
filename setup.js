@@ -45,6 +45,8 @@ window.addEventListener('load', function() {
   let firm_income_summary_table_container = document.getElementById('firm-income-summary-table-container');
 
   let selected_market_summary_table_container = document.getElementById('selected-market-summary-table-container');
+  let selected_budget_summary_table_container = document.getElementById('selected-budget-summary-table-container');
+  let selected_firm_income_summary_table_container = document.getElementById('selected-firm-income-summary-table-container');
 
   // UPDATING THE MARKET AND BUDGET SUMMARIES
   
@@ -60,9 +62,13 @@ window.addEventListener('load', function() {
   
   // UPDATE SELECTED BOX
   selected_market_summary_table_container.innerHTML = '';
-  let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [SELECTED.x, SELECTED.y])
+  selected_budget_summary_table_container.innerHTML = '';
+  selected_firm_income_summary_table_container.innerHTML = '';
+  let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [SELECTED.x, SELECTED.y]);
   selected_market_summary_table_container.appendChild(returnMarketSummaryTable(SELECTEDMARKET));
-        
+  selected_budget_summary_table_container.appendChild(returnBudgetSummaryTable(SELECTEDMARKET));
+  selected_firm_income_summary_table_container.appendChild(returnFirmIncomeSummaryTable(SELECTEDMARKET));
+  
     // SOLVING CENTRALLY PLANNED PROBLEM
 
     let solution_n1 = document.getElementById('solution_n1');
@@ -117,8 +123,12 @@ window.addEventListener('load', function() {
         
         // UPDATE SELECTED BOX
         selected_market_summary_table_container.innerHTML = '';
-        let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [SELECTED.x, SELECTED.y])
+        selected_budget_summary_table_container.innerHTML = '';
+        selected_firm_income_summary_table_container.innerHTML = '';
+        let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [SELECTED.x, SELECTED.y]);
         selected_market_summary_table_container.appendChild(returnMarketSummaryTable(SELECTEDMARKET));
+        selected_budget_summary_table_container.appendChild(returnBudgetSummaryTable(SELECTEDMARKET));
+        selected_firm_income_summary_table_container.appendChild(returnFirmIncomeSummaryTable(SELECTEDMARKET));
 
       });
     }
@@ -165,8 +175,12 @@ window.addEventListener('load', function() {
     
     // UPDATE SELECTED BOX
     selected_market_summary_table_container.innerHTML = '';
-    let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [SELECTED.x, SELECTED.y])
+    selected_budget_summary_table_container.innerHTML = '';
+    selected_firm_income_summary_table_container.innerHTML = '';
+    let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [SELECTED.x, SELECTED.y]);
     selected_market_summary_table_container.appendChild(returnMarketSummaryTable(SELECTEDMARKET));
+    selected_budget_summary_table_container.appendChild(returnBudgetSummaryTable(SELECTEDMARKET));
+    selected_firm_income_summary_table_container.appendChild(returnFirmIncomeSummaryTable(SELECTEDMARKET));
   });
   
   b.c.addEventListener('mousemove', function(e) {
@@ -186,8 +200,13 @@ window.addEventListener('load', function() {
     
     // UPDATE SELECTED BOX
     selected_market_summary_table_container.innerHTML = '';
-    let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [val.x, val.y])
+    selected_budget_summary_table_container.innerHTML = '';
+    selected_firm_income_summary_table_container.innerHTML = '';
+    let SELECTEDMARKET = testMarketPrices(alpha, beta, gamma, L, w, [SELECTED.x, SELECTED.y]);
     selected_market_summary_table_container.appendChild(returnMarketSummaryTable(SELECTEDMARKET));
+    selected_budget_summary_table_container.appendChild(returnBudgetSummaryTable(SELECTEDMARKET));
+    selected_firm_income_summary_table_container.appendChild(returnFirmIncomeSummaryTable(SELECTEDMARKET));
+    
   });
 
 }); // CLOSING WINDOW LOAD EVENT

@@ -41,8 +41,10 @@
 
 <body>
 
+<div class='section'>
+ <h4> GE : 1x2x2 intermediate good </h4>
 
-<h4> GE : 1x2x2 intermediate good </h4>
+ <img src='ge-intermediate-good.png' />
 
 <div class='sub-section'>
 <table class='mytables'>
@@ -65,7 +67,11 @@
  <tr><td><p>FIRM2 : <span class='math orange'>y_1^*</span></p></td><td><p>CONSUMER : <span class='math dark-blue'>x^*</span></p></td></tr>
 </table>
 </div>
+</div>
 
+<div class='section'>
+
+<div class='sub-section'>
 <table class='mytables'>
  <tr><td><p>FIRM[0]</p></td><td><p>FIRM[1]</p></td><td><p>CONSUMER</p></td></tr>
  <tr>
@@ -120,6 +126,27 @@
   </td>
  </tr>
 </table>
+</div>
+
+<div class='sub-section' style='border: 1px solid #ddd; margin: 1vh; padding: 1vh;'>
+ <h4> central planner </h4>
+ <p><span class='math'>u = \ln [n_2^{\beta}(n_1^{\alpha}+1)^{1-\beta}] + \gamma \ln (L-n_1-n_2) </span></p>
+ <p><span class='math outline'>u = \beta \ln n_2 + (1-\beta) \ln (n_1^{\alpha}+1) + \gamma \ln (L-n_1-n_2) </span></p>
+ <p> (3) : from du/dn2 <span class='math outline'> n_2 = \frac{\beta}{\gamma+\beta} \cdot (L-n_1)</span></p>
+ <p> (4) : from du/dn1 <span class='math outline'> n_2 = -A n_1^{1-\alpha} - (A+1)n_1 + L</span> where <span class='math'>A= \dfrac{\gamma}{\alpha(1-\beta)}</span></p>
+ <p> Solution : <span class='math outline'>0 = -A n_1^{1-\alpha} - (A-B+1) n_1 + (1-B)L</span> where <span class='math'>B = \frac{\beta}{\gamma+\beta}</span></p>
+ <p> idk how to solve this except for numerically. </p>
+
+  <!--
+   <p> graph both (3) and (4) as n2 v n1 </p>
+   <p> and graph exp(u(n1)) for both - it looks quite nice</p>
+   <h4> conditions under which n1 = 0 ? </h4>
+   <div class='' id=''></div>
+  -->
+
+</div>
+
+</div>
 
 <div class='section'>
 <div class='sub-section'>
@@ -166,8 +193,11 @@
 <!--<img src='../micro-images/algo-diagram.png' />-->
 <div class='section'>
  <div class='sub-section' id='box-container'></div>
- <div class='sub-section' id='selected-market-summary-table-container'></div>
- <div class='sub-section' id='current-market-summary-table-container'></div>
+ <div class='sub-section'>
+  <div class='sub' id='selected-market-summary-table-container'></div>
+  <div class='sub' id='selected-firm-income-summary-table-container'></div>
+  <div class='sub' id='selected-budget-summary-table-container'></div>
+ </div>
 </div>
 
 <!--
@@ -182,23 +212,7 @@
 
 -->
 
-<div class='section'>
- <h4> central planner </h4>
- <p><span class='math'>u = \ln [n_2^{\beta}(n_1^{\alpha}+1)^{1-\beta}] + \gamma \ln (L-n_1-n_2) </span></p>
- <p><span class='math outline'>u = \beta \ln n_2 + (1-\beta) \ln (n_1^{\alpha}+1) + \gamma \ln (L-n_1-n_2) </span></p>
- <p> (3) : from du/dn2 <span class='math outline'> n_2 = \frac{\beta}{\gamma+\beta} \cdot (L-n_1)</span></p>
- <p> (4) : from du/dn1 <span class='math outline'> n_2 = -A n_1^{1-\alpha} - (A+1)n_1 + L</span> where <span class='math'>A= \dfrac{\gamma}{\alpha(1-\beta)}</span></p>
- <p> Solution : <span class='math outline'>0 = -A n_1^{1-\alpha} - (A-B+1) n_1 + (1-B)L</span> where <span class='math'>B = \frac{\beta}{\gamma+\beta}</span></p>
- <p> idk how to solve this except for numerically. </p>
 
-  <!--
-   <p> graph both (3) and (4) as n2 v n1 </p>
-   <p> and graph exp(u(n1)) for both - it looks quite nice</p>
-   <h4> conditions under which n1 = 0 ? </h4>
-   <div class='' id=''></div>
-  -->
-
-</div>
 </body>
 
 </html>

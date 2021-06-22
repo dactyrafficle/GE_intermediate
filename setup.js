@@ -4,7 +4,7 @@
 
 window.addEventListener('load', function() {
   
-  let alpha 0.5;
+  let alpha = 0.5;
   let beta = 0.5;
   let gamma = 1.1;
   let L = 24;

@@ -107,7 +107,9 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
         firm_income_summary_table_container.innerHTML = '';
         firm_income_summary_table_container.appendChild(returnFirmIncomeSummaryTable(MARKETSOLUTION));
 
-        showCentrallyPlannedSolution(alpha, beta, gamma, L);
+        CENTRALSOLUTION = solveCentralPlanner(alpha, beta, gamma, L);
+        showCentrallyPlannedSolution(CENTRALSOLUTION);
+        
         EXXARR = returnExxArr(b, alpha, beta, gamma, L);
         updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
         

@@ -10,8 +10,10 @@ function updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, SOLUTIONPATH, CENTRALSOL
   b.showAxes(15);
   
   // REDRAW EXXARR
-  for (let i = 0; i < EXXARR.length; i++) {
-    b.SHOWVALUE({'x':EXXARR[i].p[0],'y':EXXARR[i].p[1]}, '#ffcc00ff', 1);
+  for (let i = 0; i < EXXARR.length-1; i++) {
+    let val0 = {'x':EXXARR[i].p[0],'y':EXXARR[i].p[1]};
+    let val1 = {'x':EXXARR[i+1].p[0],'y':EXXARR[i+1].p[1]};
+    b.CONNECTVALUES(val0, val1, '#ffcc00ff', 1);
   }
 
   // REDRAW MARKETSOLUTION

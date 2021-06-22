@@ -16,7 +16,9 @@ function showCentrallyPlannedSolution(SOLUTIONS) {
   solution_k.innerHTML = (SOLUTIONS.solution_a.k).toFixed(n_decimal_placed);
   solution_x.innerHTML = (SOLUTIONS.solution_a.x).toFixed(n_decimal_placed);
   solution_u.innerHTML = (SOLUTIONS.solution_a.u).toFixed(n_decimal_placed);
-
+  solution_a_p0.innerHTML = (SOLUTIONS.solution_a.p[0]).toFixed(n_decimal_placed);
+  solution_a_p1.innerHTML = (SOLUTIONS.solution_a.p[1]).toFixed(n_decimal_placed);
+  
   // THE N0=0 SOLUTION
   solution_b_n0.innerHTML = (SOLUTIONS.solution_b.n0).toFixed(n_decimal_placed);
   solution_b_n1.innerHTML = (SOLUTIONS.solution_b.n1).toFixed(n_decimal_placed);

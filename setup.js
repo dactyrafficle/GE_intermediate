@@ -72,6 +72,8 @@ window.addEventListener('load', function() {
     let solution_k = document.getElementById('solution_k');
     let solution_x = document.getElementById('solution_x');
     let solution_u = document.getElementById('solution_u');
+    let solution_a_p0 = document.getElementById('solution_a_p0');
+    let solution_a_p1 = document.getElementById('solution_a_p1');
     
     let solution_b_n0 = document.getElementById('solution_b_n0');
     let solution_b_n1 = document.getElementById('solution_b_n1');

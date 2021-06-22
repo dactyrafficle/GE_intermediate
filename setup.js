@@ -1,16 +1,16 @@
 
-let exogenous_variables = fetch('exogenous_variables.json?x=' + Math.random()).then(r => r.json());
-let initial_prices = fetch('initial_prices.json?x=' + Math.random()).then(r => r.json());
+//let exogenous_variables = fetch('exogenous_variables.json?x=' + Math.random()).then(r => r.json());
+//let initial_prices = fetch('initial_prices.json?x=' + Math.random()).then(r => r.json());
 
-Promise.all([exogenous_variables, initial_prices]).then((values) => {
+window.addEventListener('load', function() {
   
-  let alpha = values[0].alpha;
-  let beta = values[0].beta;
-  let gamma = values[0].gamma;
-  let L = values[0].L;
+  let alpha 0.5;
+  let beta = 0.5;
+  let gamma = 1.1;
+  let L = 24;
   
-  let w = values[1].w;
-  let p = values[1].p;
+  let w = 1;
+  let p = [1, 1];
   
   let MARKETSOLUTION;
   let EXXARR;
@@ -188,4 +188,4 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
     selected_market_summary_table_container.appendChild(returnMarketSummaryTable(SELECTEDMARKET));
   });
 
-});
+}); // CLOSING WINDOW LOAD EVENT

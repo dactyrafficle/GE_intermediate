@@ -1,0 +1,33 @@
+.mytables td {
+  vertical-align: top;
+}
+
+.orange {
+  color: #ff9900;
+}
+.dark-green {
+  color: #66cc66;
+}
+.dark-blue {
+  color: #4775d1;
+}
+.results td {
+  text-align: right;
+}
+.results tr td:nth-child(1) {
+  text-align: left;
+}
+.results tr:nth-child(1) td:nth-child(1) {
+  text-align: center;
+  font-weight: bold;
+}
+.myinputs {
+  font-size: 20px;
+  padding: 0.25vh;
+  margin: 0.25vh;
+  width: 70px;
+}
+.myinputs td {
+  vertical-align: center;
+}
+

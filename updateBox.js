@@ -2,7 +2,7 @@
 
 
 
-function updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, SOLUTIONPATH) {
+function updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, SOLUTIONPATH, CENTRALSOLUTION) {
 
   b.clear();
   b.SHOWGRIDX(0.5);
@@ -21,7 +21,9 @@ function updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, SOLUTIONPATH) {
   // REDRAW SELECTED
   b.SHOWVALUE({'x':SELECTED.x,'y':SELECTED.y}, '#adc2eb', 3);
 
-  
+  // REDRAW CENTRAL SOLUTION
+  console.log(CENTRALSOLUTION);
+  b.SHOWVALUE({'x':CENTRALSOLUTION.solution_a.p[0], 'y':CENTRALSOLUTION.solution_a.p[1]}, '#c2d6d6', 5);
 
 
   /*

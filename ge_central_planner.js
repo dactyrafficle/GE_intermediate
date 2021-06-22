@@ -1,6 +1,6 @@
-function showCentrallyPlannedSolution(alpha, beta, gamma, L) {
+function showCentrallyPlannedSolution(SOLUTIONS) {
  
-  let solutions = solveCentralPlanner(alpha, beta, gamma, L);
+  //let SOLUTIONS = solveCentralPlanner(alpha, beta, gamma, L);
 
   // [alpha, beta, gamma, L] = [0.5, 0.5, 1.1, 24]
   // [n1, n2, n, b, k, x, u] = [2.0154, 6.8701875, 8.8855875]
@@ -9,22 +9,22 @@ function showCentrallyPlannedSolution(alpha, beta, gamma, L) {
   let n_decimal_placed = 4;
   
   // THE N0>=SOLUTION
-  solution_n1.innerHTML = (solutions.solution_a.n1).toFixed(n_decimal_placed);
-  solution_n2.innerHTML = (solutions.solution_a.n2).toFixed(n_decimal_placed);
-  solution_n.innerHTML = (solutions.solution_a.n).toFixed(n_decimal_placed);
-  solution_b.innerHTML = (solutions.solution_a.b).toFixed(n_decimal_placed);
-  solution_k.innerHTML = (solutions.solution_a.k).toFixed(n_decimal_placed);
-  solution_x.innerHTML = (solutions.solution_a.x).toFixed(n_decimal_placed);
-  solution_u.innerHTML = (solutions.solution_a.u).toFixed(n_decimal_placed);
+  solution_n1.innerHTML = (SOLUTIONS.solution_a.n1).toFixed(n_decimal_placed);
+  solution_n2.innerHTML = (SOLUTIONS.solution_a.n2).toFixed(n_decimal_placed);
+  solution_n.innerHTML = (SOLUTIONS.solution_a.n).toFixed(n_decimal_placed);
+  solution_b.innerHTML = (SOLUTIONS.solution_a.b).toFixed(n_decimal_placed);
+  solution_k.innerHTML = (SOLUTIONS.solution_a.k).toFixed(n_decimal_placed);
+  solution_x.innerHTML = (SOLUTIONS.solution_a.x).toFixed(n_decimal_placed);
+  solution_u.innerHTML = (SOLUTIONS.solution_a.u).toFixed(n_decimal_placed);
 
   // THE N0=0 SOLUTION
-  solution_b_n0.innerHTML = (solutions.solution_b.n0).toFixed(n_decimal_placed);
-  solution_b_n1.innerHTML = (solutions.solution_b.n1).toFixed(n_decimal_placed);
-  solution_b_n.innerHTML = (solutions.solution_b.n).toFixed(n_decimal_placed);
-  solution_b_b.innerHTML = (solutions.solution_b.b).toFixed(n_decimal_placed);
-  solution_b_k.innerHTML = (solutions.solution_b.k).toFixed(n_decimal_placed);
-  solution_b_x.innerHTML = (solutions.solution_b.x).toFixed(n_decimal_placed);
-  solution_b_u.innerHTML = (solutions.solution_b.u).toFixed(n_decimal_placed);
+  solution_b_n0.innerHTML = (SOLUTIONS.solution_b.n0).toFixed(n_decimal_placed);
+  solution_b_n1.innerHTML = (SOLUTIONS.solution_b.n1).toFixed(n_decimal_placed);
+  solution_b_n.innerHTML = (SOLUTIONS.solution_b.n).toFixed(n_decimal_placed);
+  solution_b_b.innerHTML = (SOLUTIONS.solution_b.b).toFixed(n_decimal_placed);
+  solution_b_k.innerHTML = (SOLUTIONS.solution_b.k).toFixed(n_decimal_placed);
+  solution_b_x.innerHTML = (SOLUTIONS.solution_b.x).toFixed(n_decimal_placed);
+  solution_b_u.innerHTML = (SOLUTIONS.solution_b.u).toFixed(n_decimal_placed);
 }
 
 function solveCentralPlanner(alpha, beta, gamma, L) {
@@ -37,6 +37,9 @@ function solveCentralPlanner(alpha, beta, gamma, L) {
   let n1 = 0;
   let exx = 9999999;
   let dx = 1;
+  
+  let w = 1;
+  let p = [];
 
   while (dx > 0.00001) {
     
@@ -67,6 +70,9 @@ function solveCentralPlanner(alpha, beta, gamma, L) {
   let x = n2**beta*(k+1)**(1-beta);
   let u = Math.log(x, Math.E) + gamma*Math.log(b, Math.E);
   
+  p[0] = w/(alpha*n1**(alpha-1));
+  p[1] = (w/beta)*((k+1)/n2)**(beta-1);
+  
   let solution_a = {
    'n1':n1,
    'n2':n2,
@@ -74,7 +80,8 @@ function solveCentralPlanner(alpha, beta, gamma, L) {
    'b':b,
    'k':k,
    'x':x,
-   'u':u
+   'u':u,
+   'p':p
   }
   
   // assume n0 = 0

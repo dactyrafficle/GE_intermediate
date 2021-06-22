@@ -14,6 +14,7 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
   
   let MARKETSOLUTION;
   let EXXARR;
+  let CENTRALSOLUTION;
   let SELECTED = {
     'x':0,
     'y':0,
@@ -80,7 +81,8 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
     let solution_b_x = document.getElementById('solution_b_x');
     let solution_b_u = document.getElementById('solution_b_u');
     
-    showCentrallyPlannedSolution(alpha, beta, gamma, L);
+    CENTRALSOLUTION = solveCentralPlanner(alpha, beta, gamma, L);
+    showCentrallyPlannedSolution(CENTRALSOLUTION);
   
 
     // ADJUSTING EXOGENOUS VARIABLES
@@ -107,7 +109,7 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
 
         showCentrallyPlannedSolution(alpha, beta, gamma, L);
         EXXARR = returnExxArr(b, alpha, beta, gamma, L);
-        updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1);
+        updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
         
         // UPDATE SELECTED BOX
         selected_market_summary_table_container.innerHTML = '';
@@ -130,7 +132,7 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
   EXXARR = returnExxArr(b, alpha, beta, gamma, L);
   SELECTED.x = b.data.range.x.min + 0.5*b.data.range.x.span;
   SELECTED.y = b.data.range.y.min + 0.5*b.data.range.y.span;
-  updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1);
+  updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
 
   let keyIsPressed = false;
   
@@ -155,7 +157,7 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
     if (k === 65) {
       SELECTED.x -= mag;
     }
-    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1);
+    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
     
     // UPDATE SELECTED BOX
     selected_market_summary_table_container.innerHTML = '';
@@ -176,7 +178,7 @@ Promise.all([exogenous_variables, initial_prices]).then((values) => {
     SELECTED.x = val.x;
     SELECTED.y = val.y;
     
-    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1);
+    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
     
     // UPDATE SELECTED BOX
     selected_market_summary_table_container.innerHTML = '';

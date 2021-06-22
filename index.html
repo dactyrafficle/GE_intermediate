@@ -17,26 +17,27 @@
  <!-- To automatically render math in text elements, include the auto-render extension: -->
  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js" integrity="sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
- <script src='exogenous_variables.js'></script>
- <script src='initial_prices.js'></script>
+ <script src='testMarketPrices.js'></script>
+ <script src='solveMarket.js'></script>
+ <script src='setup.js'></script>
+ <script src='math.js'></script>
+ 
+ <script src='returnMarketSummaryTable.js'></script>
+ <script src='returnBudgetSummaryTable.js'></script>
+ <script src='returnFirmIncomeSummaryTable.js'></script>
+ 
+ <script src='returnExxArr.js'></script>
  <script src='Box.js'></script>
+ <script src='updateBox.js'></script>
  <script src='ge_central_planner.js'></script>
 
  <title> GE : 1x2x2 intermediate good </title>
 </head>
 
 
-<script>
- window.addEventListener('load', function() {
-  let math = document.getElementsByClassName('math');
-  for (let i = 0; i < math.length; i++) {
-   katex.render(math[i].textContent, math[i]);
-  }
- });
-</script>
+
 
 <body>
-
 
 
 <h4> GE : 1x2x2 intermediate good </h4>
@@ -118,7 +119,7 @@
 <table class='mytables' >
  <tr><td colspan='99' style='font-weight: bold; text-align: center;'>PARAMETERS</td></tr>
  <tr>
-  <td><div>alpha</div></td><td>makes firm[0] more important<td><input class='myinputs' type='number' step='0.01' min=0.01 max=0.99 value=0.5 id='input_alpha' /></td>
+  <td><div>alpha</div></td><td>makes firm[0] more important<td><input class='myinputs' type='number' step='0.01' min=0.01 max=0.99 value=0.1 id='input_alpha' /></td>
  </tr>
  <tr>
   <td><div>beta</div></td><td>makes firm[0] less important</td><td><input class='myinputs' type='number' step='0.01' min=0.01 max=0.99 value=0.5 id='input_beta' /></td>
@@ -146,17 +147,17 @@
  </table>
 </div>
 
-<div class='sub-section' id='market-summary-table'></div>
-<div class='sub-section' id='budget-summary-table'></div>
+<div class='sub-section' id='market-summary-table-container'></div>
+<div class='sub-section' id='firm-income-summary-table-container'></div>
+<div class='sub-section' id='budget-summary-table-container'></div>
 
 </div>
 
-
-
 <!--<img src='../micro-images/algo-diagram.png' />-->
 <div class='section'>
-<div class='sub-section' id='box-container'></div>
-<div class='sub-section' id='current-market-summary-table'></div>
+ <div class='sub-section' id='box-container'></div>
+ <div class='sub-section' id='selected-market-summary-table-container'></div>
+ <div class='sub-section' id='current-market-summary-table-container'></div>
 </div>
 
 <!--
@@ -172,513 +173,24 @@
 -->
 
 <div class='section'>
-<h4> central planner </h4>
-<p><span class='math'>u = \ln [n_2^{\beta}(n_1^{\alpha}+1)^{1-\beta}] + \gamma \ln (L-n_1-n_2) </span></p>
+ <h4> central planner </h4>
+ <p><span class='math'>u = \ln [n_2^{\beta}(n_1^{\alpha}+1)^{1-\beta}] + \gamma \ln (L-n_1-n_2) </span></p>
+ <p><span class='math outline'>u = \beta \ln n_2 + (1-\beta) \ln (n_1^{\alpha}+1) + \gamma \ln (L-n_1-n_2) </span></p>
+ <p> (3) : from du/dn2 <span class='math outline'> n_2 = \frac{\beta}{\gamma+\beta} \cdot (L-n_1)</span></p>
+ <p> (4) : from du/dn1 <span class='math outline'> n_2 = -A n_1^{1-\alpha} - (A+1)n_1 + L</span> where <span class='math'>A= \dfrac{\gamma}{\alpha(1-\beta)}</span></p>
+ <p> Solution : <span class='math outline'>0 = -A n_1^{1-\alpha} - (A-B+1) n_1 + (1-B)L</span> where <span class='math'>B = \frac{\beta}{\gamma+\beta}</span></p>
+ <p> idk how to solve this except for numerically. </p>
 
-<p><span class='math outline'>u = \beta \ln n_2 + (1-\beta) \ln (n_1^{\alpha}+1) + \gamma \ln (L-n_1-n_2) </span></p>
+  <!--
+   <p> graph both (3) and (4) as n2 v n1 </p>
+   <p> and graph exp(u(n1)) for both - it looks quite nice</p>
+   <h4> conditions under which n1 = 0 ? </h4>
+   <div class='' id=''></div>
+  -->
 
-
-<p> (3) : from du/dn2 <span class='math outline'> n_2 = \frac{\beta}{\gamma+\beta} \cdot (L-n_1)</span></p>
-
-<p> (4) : from du/dn1 <span class='math outline'> n_2 = -A n_1^{1-\alpha} - (A+1)n_1 + L</span> where <span class='math'>A= \dfrac{\gamma}{\alpha(1-\beta)}</span></p>
-
-<p> Solution : <span class='math outline'>0 = -A n_1^{1-\alpha} - (A-B+1) n_1 + (1-B)L</span> where <span class='math'>B = \frac{\beta}{\gamma+\beta}</span></p>
-
-<p> idk how to solve this except for numerically. </p>
-
-
-
-<script>
-
-window.addEventListener('load', function() {
-
-  let solution_n1 = document.getElementById('solution_n1');
-  let solution_n2 = document.getElementById('solution_n2');
-  let solution_n = document.getElementById('solution_n');
-  let solution_b = document.getElementById('solution_b');
-  let solution_k = document.getElementById('solution_k');
-  let solution_x = document.getElementById('solution_x');
-  let solution_u = document.getElementById('solution_u');
-  
-  let solution_b_n0 = document.getElementById('solution_b_n0');
-  let solution_b_n1 = document.getElementById('solution_b_n1');
-  let solution_b_n = document.getElementById('solution_b_n');
-  let solution_b_b = document.getElementById('solution_b_b');
-  let solution_b_k = document.getElementById('solution_b_k');
-  let solution_b_x = document.getElementById('solution_b_x');
-  let solution_b_u = document.getElementById('solution_b_u');
-  
-  showCentrallyPlannedSolution(alpha, beta, gamma, L);
-
-});
-
-</script>
-<!--
-
-<p> graph both (3) and (4) as n2 v n1 </p>
-<p> and graph exp(u(n1)) for both - it looks quite nice</p>
-
-<h4> conditions under which n1 = 0 ? </h4>
-
-<div class='' id=''></div>
--->
 </div>
-
 </body>
 
-<script>
-
-// [0.5, 0.5, 1.1, 24] : solutions :
-// [0, 5.477225575] is an answer, even tho utility is low, it still solves
-// [2.9901, 3.3021]
-// [2.84, 3.37]  // highest utility
-
-
-window.addEventListener('load', function() {
-  let el = document.getElementById('box-container');
-  let b = new Box('p[0]', 'p[1]');
-  el.appendChild(b.returnCanvas());
-  
-
-  
-  b.dimension(1000, 1000);
-  b.border('1px solid #ddd');
-  b.rangex(-0.5, 6);
-  b.rangey(-0.5, 6);
-  b.SHOWGRIDX(0.5);
-  b.SHOWGRIDY(0.5);
-  b.showAxes(15);
-  console.log(b);
-  
-  let current = {
-    'x': b.data.range.x.min + 0.5*b.data.range.x.span,
-    'y': b.data.range.y.min + 0.5*b.data.range.y.span,
-    'v':{
-      'x':0,
-      'y':0
-    },
-    'a':{
-      'x':0,
-      'y':0
-    }
-  }
-  window.addEventListener('keydown', function(e) {
-    //console.log(e.keyCode);
-    current.a.x = 0;
-    current.a.y = 0;
-    current.v.x = 0;
-    current.v.y = 0;   
-    if (e.keyCode === 87) {
-      current.v.y += 0.01;
-    }
-    if (e.keyCode === 68) {
-      current.v.x += 0.01;
-    }
-    if (e.keyCode === 83) {
-      current.v.y -= 0.01;
-    }
-    if (e.keyCode === 65) {
-      current.v.x -= 0.01;
-    } 
-    current.x += current.v.x;
-    current.y += current.v.y;
-    
-    b.clear();
-    
-    for (let i = 0; i < exxArr.length; i++) {
-      b.SHOWVALUE({'x':exxArr[i].p0,'y':exxArr[i].p1}, '#ffcc00ff', 1);
-    }
-    
-  b.SHOWGRIDX(0.5);
-  b.SHOWGRIDY(0.5);
-  b.showAxes(15);
-    b.SHOWVALUE({'x':current.x,'y':current.y}, '#00ff', 2);
-    
-    let market = testMarket(w, current.x, current.y);
-    document.getElementById('current-market-summary-table').innerHTML = '';
-    document.getElementById('current-market-summary-table').appendChild(returnMarketSummaryTable(market));
-  });
-  
-  
-  /*
-  b.c.addEventListener('mousemove', function(e) {
-    // get position
-    let pixel = {'x':e.offsetX,'y':e.offsetY};
-    let val = b.PIXEL2VAL(pixel);
-    //console.log(val);
-    
-    let market = testMarket(w, val.x, val.y);
-    document.getElementById('current-market-summary-table').innerHTML = '';
-    document.getElementById('current-market-summary-table').appendChild(returnMarketSummaryTable(market));
-    
-  });
-  */
-  
-  let solution = solveMarket(w,p);
-  console.log(solution);
-  for (let i = 0; i < solution.solution_path.length-1; i++) {
-    
-    let a0 = solution.solution_path[i];
-    let a1 = solution.solution_path[i+1];
-    
-    let val0 = {'x':a0[0],'y':a0[1]};
-    let val1 = {'x':a1[0],'y':a1[1]};
-    if (i === 0) {
-      b.SHOWVALUE(val0, "#f00", 2);
-    }
-    b.SHOWVALUE(val1, "#f00", 2);
-    b.CONNECTVALUES(val0, val1, "#f00", 1);
-  }
-  
-  // HEATMAP
-  let dp = 0.01;
-  let exxArr = [];
-  for (let x = 0; x < b.data.range.x.max; x += dp) {
-    for (let y = 0; y < b.data.range.y.max; y += dp) {
-
-     let exx = testMarket(w, x, y).exx;
-     if (exx < 0.0001) {
-       exxArr.push({
-         'p0':x,
-         'p1':y,
-         'exx':exx
-       });
-       b.SHOWVALUE({'x':x,'y':y}, '#ffcc00ff', 1);
-     }
-    }  
-  }
-  
-  console.log(exxArr);
-  let str = 'p0,p1,exx';
-  for (let i = 0; i < exxArr.length; i++) {
-    //console.log(exxArr[i].p1/exxArr[i].p0);
-    str += '\n' + exxArr[i].p0 + ',' + exxArr[i].p1 + ',' + exxArr[i].exx;
-  }
-  let a = document.createElement('a');
-	a.href = 'data:,' + encodeURI(str); // this really is key
-	a.target = '_blank';
-  a.download = 'rexx_data.csv';
-  //a.click();
-  a.remove();
-  
-
-  
-  let m = solveMarket(w, p);
-  b.SHOWVALUE({'x':m.price.p1,'y':m.price.p2}, '#fc0f', 3);
-  
-}); // CLOSING WINDOW.ONLOAD
-
-
-
-document.getElementById('input_alpha').addEventListener('input', function() {
-  alpha = parseFloat(this.value);
-  let market = solveMarket(w, p);
-  let market_summary_table = returnMarketSummaryTable(market);
-  document.getElementById('market-summary-table').innerHTML = '';
-  document.getElementById('market-summary-table').appendChild(market_summary_table);
-
-  let budget_summary_table = returnBudgetSummary(market);
-  document.getElementById('budget-summary-table').innerHTML = '';
-  document.getElementById('budget-summary-table').appendChild(budget_summary_table);
-  
-  showCentrallyPlannedSolution(alpha, beta, gamma, L);
-});
-document.getElementById('input_beta').addEventListener('input', function() {
-  beta = parseFloat(this.value);
-  let market = solveMarket(w, p);
-  let market_summary_table = returnMarketSummaryTable(market);
-  document.getElementById('market-summary-table').innerHTML = '';
-  document.getElementById('market-summary-table').appendChild(market_summary_table);
-
-  let budget_summary_table = returnBudgetSummary(market);
-  document.getElementById('budget-summary-table').innerHTML = '';
-  document.getElementById('budget-summary-table').appendChild(budget_summary_table);
-showCentrallyPlannedSolution(alpha, beta, gamma, L);
-});
-document.getElementById('input_gamma').addEventListener('input', function() {
-  gamma = parseFloat(this.value);
-  let market = solveMarket(w, p);
-  let market_summary_table = returnMarketSummaryTable(market);
-  document.getElementById('market-summary-table').innerHTML = '';
-  document.getElementById('market-summary-table').appendChild(market_summary_table);
-
-  let budget_summary_table = returnBudgetSummary(market);
-  document.getElementById('budget-summary-table').innerHTML = '';
-  document.getElementById('budget-summary-table').appendChild(budget_summary_table);
-showCentrallyPlannedSolution(alpha, beta, gamma, L);
-});
-document.getElementById('input_L').addEventListener('input', function() {
-  L = parseFloat(this.value);
-  let market = solveMarket(w, p);
-  let market_summary_table = returnMarketSummaryTable(market);
-  document.getElementById('market-summary-table').innerHTML = '';
-  document.getElementById('market-summary-table').appendChild(market_summary_table);
-
-  let budget_summary_table = returnBudgetSummary(market);
-  document.getElementById('budget-summary-table').innerHTML = '';
-  document.getElementById('budget-summary-table').appendChild(budget_summary_table);
-showCentrallyPlannedSolution(alpha, beta, gamma, L);
-});
-
-let market = solveMarket(w, p); 
-console.log(market);     // 1.81, 3.90
-// console.log(solveMarket2(w, p));  // 0.70, 4.70
-
-// alpha, beta, gamma, L : 0.5, 0.5, 1.1, 24 - alpha and beta are the same
-// there seems to be 2 sets of solutions
-// console.log(testMarket(1, 1.81, 3.90));
-// console.log(testMarket(1, 0.70, 4.70));
-
-// map error on price levels in canvas
-// make sure no weird values. firm1 can be 0-0-0
-// make sure b > L 
-
-let market_summary_table = returnMarketSummaryTable(market);
-document.getElementById('market-summary-table').appendChild(market_summary_table);
-
-let budget_summary_table = returnBudgetSummary(market);
-document.getElementById('budget-summary-table').appendChild(budget_summary_table);
-
-
-function returnMarketSummaryTable(market) {
- let table = document.createElement('table');
- table.classList.add('mytables');
- table.classList.add('results');
- 
- let str = '';
- str += '<tr><td colspan="4">MARKET SUMMARY</td></tr>';
- str += '<tr><td></td><td>LABOR[0]</td><td>GOODS[0]</td><td>GOODS[1]</td></tr>'
- str += '<tr><td>PRICES</td><td>'+ (market.price.w).toFixed(4) +'</td><td>'+ (market.price.p1).toFixed(4) +'</td><td>' + (market.price.p2).toFixed(4) + '</td></tr>'
- str += '<tr><td>FIRMS[0]</td><td>'+ (-market.firms[0].z).toFixed(4) +'</td><td>'+ (market.firms[0].y).toFixed(4) +'</td><td>' + (0).toFixed(4) + '</td></tr>'
- str += '<tr><td>FIRMS[1]</td><td>'+ (-market.firms[1].z).toFixed(4) +'</td><td>'+ (market.firms[1].k).toFixed(4) +'</td><td>' + (-market.firms[1].y).toFixed(4) + '</td></tr>'
- str += '<tr><td>CONSUMERS[0]</td><td>'+ (market.consumers[0].n).toFixed(4) +'</td><td>'+ (0).toFixed(4) +'</td><td>' + (-market.consumers[0].x).toFixed(4) + '</td></tr>'
- str += '<tr><td>EXX</td><td>'+ (market.labor.exx**2).toFixed(4) +'</td><td>'+ (market.capital.exx**2).toFixed(4) +'</td><td>' + (market.goods.exx**2).toFixed(4) + '</td></tr>'
- 
- table.innerHTML += str;
- return table;
-}
-
-function returnBudgetSummary(market) {
- let table = document.createElement('table');
- table.classList.add('mytables');
- table.classList.add('results');
- 
- let str = '';
- str += '<tr><td colspan="2">BUDGET SUMMARY</td></tr>';
- str += '<tr><td></td><td>CONSUMER[0]</td></tr>';
- 
- str += '<tr><td>w*L</td><td>'+ (market.consumers[0].allocation.L*market.price.w).toFixed(4) +'</td></tr>';
- str += '<tr><td>FIRMS[0].profit</td><td>'+ (market.firms[0].profit).toFixed(4) +'</td></tr>';
- str += '<tr><td>FIRMS[1].profit</td><td>'+ (market.firms[1].profit).toFixed(4) +'</td></tr>';
- str += '<tr><td>BUDGET</td><td>'+ (market.consumers[0].total_budget).toFixed(4) +'</td></tr>';
- str += '<tr><td>leisure</td><td>'+ (market.consumers[0].allocation.b*market.price.w).toFixed(4) +'</td></tr>';
- str += '<tr><td>INCOME</td><td>'+ (market.consumers[0].total_income).toFixed(4) +'</td></tr>';
- str += '<tr><td>goods</td><td>'+ (market.consumers[0].allocation.x*market.price.p2).toFixed(4) +'</td></tr>';
- str += '<tr><td>BALANCE</td><td>'+ (market.consumers[0].total_income - market.consumers[0].total_expenditure).toFixed(4) +'</td></tr>';
- 
- table.innerHTML += str;
- return table;
-}
-
-
-
-function solveMarket(w, p) {
-
- let dp = 0.1; // if you start too large, you will shoot right past the best region!!!! 
- let m = [-1*dp, 0, 1*dp];
-
- let current_prices = [p[0], p[1]];
- let current_market = testMarket(w, current_prices[0], current_prices[1]);
- 
- let solution_path = [];
- solution_path[0] = p;
- 
- while (dp > 0.00001) {
-   
-   let best_prices = [];
-   best_prices[0] = current_prices[0];
-   best_prices[1] = current_prices[1];
-   let best_market = testMarket(w, current_prices[0], current_prices[1]);
- 
-   let improved = false;
-   for (let i = 0; i < m.length; i++) {
-    for (let j = 0; j < m.length; j++) {
-     if (i === 1 && j === 1) {}
-     else {
-      let test_market = testMarket(w, (current_prices[0]+m[i]), (current_prices[1]+m[j]));
-      if (test_market.exx < best_market.exx) {
-        best_prices[0] = (current_prices[0]+m[i]);
-        best_prices[1] = (current_prices[1]+m[j]);
-        best_market = testMarket(w, best_prices[0], best_prices[1]);
-        improved = true;
-        solution_path.push(best_prices);
-      }
-     }
-    } 
-   }
-   
-   if (improved) {
-     current_prices[0] = best_prices[0];
-     current_prices[1] = best_prices[1];
-     current_market = testMarket(w, current_prices[0], current_prices[1]);
-   } else {
-     dp = dp/10;
-     m = [-1*dp, 0, 1*dp];
-   }
-   
- }
- current_market.solution_path = solution_path;
- return current_market;
-}
-
-
-function solveMarket2(w, p) {
- let market = testMarket(w, p[0], p[1]);
- let dx = 0.1;
- for (let i = dx; i < 20; i += dx) {
-  for (let j = dx; j < 20; j += dx) {
-    let e1 = testMarket(w, i, j);
-    if (e1.exx < market.exx) {
-     market = e1;       
-    }
-  }
- }
- return market;
-}
-
-function testMarket(w, p1, p2) {
-  
-  let market = {
-   'labor':{
-     'supply':0,
-     'demand':0,
-     'exx':0
-   },
-   'capital':{
-     'supply':0,
-     'demand':0,
-     'exx':0
-   },
-   'goods':{
-     'supply':0,
-     'demand':0,
-     'exx':0
-   },
-   'price':{
-     'p1':p1,
-     'p2':p2,
-     'w':w
-   },
-   'exx':0,
-   'firms':[[],[]],
-   'consumers':[[]]
-  }
-  
-  let z1 = (w/(p1*alpha))**(1/(alpha-1));
-  let y1 = z1**alpha;
-  let profit1 = p1*y1 - w*z1;
-  if (profit1 < 0) {
-    // then you dont even enter the market
-    z1 = 0;
-    y1 = 0;
-    profit1 = 0;
-  }
-  
-  market.firms[0].z = z1;
-  market.firms[0].y = y1;
-  market.firms[0].profit = profit1;
-  
-  market.labor.demand += z1;
-  market.labor.exx -= z1;
-
-  market.capital.supply += y1;
-  market.capital.exx += y1;
-  
-  // FIRM2
-  
-  let k2 = y1;
-  let z2 = (w/(p2*beta))**(1/(beta-1))*(k2+1);
-  let y2 = z2**beta*(k2+1)**(1-beta);
-  let profit2 = p2*y2 - w*z2 - p1*k2;
-  if (profit2 < 0) {
-    // then you dont even enter the market
-    k2 = 0;
-    z2 = 0;
-    y2 = 0;
-    profits2 = 0;
-  }
-  market.firms[1].z = z2;
-  market.firms[1].k = k2;
-  market.firms[1].y = y2;
-  market.firms[1].profit = profit2;
-  
-  market.labor.demand += z2;
-  market.labor.exx -= z2;
-  
-  market.capital.demand += k2;
-  market.capital.exx -= k2;
-  
-  market.goods.supply += y2;
-  market.goods.exx += y2;
-
-  // CONSUMER
-  
-  let M = w*L + profit1 + profit2;
-  let b = (gamma/(1+gamma))*M/w;
-  let n = L - b;
-  let x2 = (1/(1+gamma))*M/p2;
-  
-  market.consumers[0].b = b;
-  market.consumers[0].n = n;
-  market.consumers[0].x = x2;
-  market.consumers[0].allocation = {
-    'b':b,
-    'n':n,
-    'x':x2,
-    'L':L
-  }
-  market.consumers[0].budget = {
-    'labor':L*w,
-    'dividends':[profit1, profit2]
-  }
-  market.consumers[0].income = {
-    'labor':n*w,
-    'dividends':[profit1, profit2]
-  }
-  market.consumers[0].expense_allocation = {
-    'x':x2
-  }
-  market.consumers[0].budget_allocation = {
-    'b':b,
-    'x':x2
-  }
-  market.consumers[0].total_income = n*w + profit1 + profit2;
-  market.consumers[0].total_budget = L*w + profit1 + profit2;
-  market.consumers[0].total_expenditure = x2*p2;
-  market.consumers[0].total_budget_expenditure = b*w + x2*p2;
-  
-  market.labor.supply += n;
-  market.labor.exx += n;
-  
-  market.goods.demand += x2;
-  market.goods.exx -= x2;
-  
-  // SUMMARY
-
-  market.exx += market.labor.exx**2;
-  market.exx += (market.capital.supply-market.capital.demand)**2;  
-  market.exx += (market.goods.supply-market.goods.demand)**2;
-  
-  market.profit = [profit1, profit2];
-  
-  return market;
-  
-}
-
-
-
-
-</script>
 </html>
 
 

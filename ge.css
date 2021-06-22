@@ -30,4 +30,6 @@
 .myinputs td {
   vertical-align: center;
 }
-
+canvas {
+ cursor: crosshair;
+}

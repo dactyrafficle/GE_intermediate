@@ -9,23 +9,21 @@ function updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, SOLUTIONPATH, CENTRALSOL
   b.SHOWGRIDY(0.5);
   b.showAxes(15);
   
-  // REDRAW MARKETSOLUTION
-  b.SHOWVALUE({'x':MARKETSOLUTION.price.p[0],'y':MARKETSOLUTION.price.p[1]}, '#ffcc00ff', 4);
-  
-  
   // REDRAW EXXARR
   for (let i = 0; i < EXXARR.length; i++) {
     b.SHOWVALUE({'x':EXXARR[i].p[0],'y':EXXARR[i].p[1]}, '#ffcc00ff', 1);
   }
 
-  // REDRAW SELECTED
-  b.SHOWVALUE({'x':SELECTED.x,'y':SELECTED.y}, '#adc2eb', 3);
+  // REDRAW MARKETSOLUTION
+  b.SHOWVALUE({'x':MARKETSOLUTION.price.p[0],'y':MARKETSOLUTION.price.p[1]}, '#ffcc00ff', 4);
 
   // REDRAW CENTRAL SOLUTION
   console.log(CENTRALSOLUTION);
   b.SHOWVALUE({'x':CENTRALSOLUTION.solution_a.p[0], 'y':CENTRALSOLUTION.solution_a.p[1]}, '#c2d6d6', 5);
 
-
+  // REDRAW SELECTED
+  b.SHOWVALUE({'x':SELECTED.x,'y':SELECTED.y}, '#adc2eb', 3);
+  
   /*
   let solution = solveMarket(alpha, beta, gamma, L, w, p);
   console.log(solution);

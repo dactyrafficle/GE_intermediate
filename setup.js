@@ -13,6 +13,7 @@ window.addEventListener('load', function() {
   let p = [1, 1];
   
   let MARKETSOLUTION;
+  let MARKETSOLUTIONPATH;
   let EXXARR;
   let CENTRALSOLUTION;
   let SELECTED = {
@@ -51,6 +52,7 @@ window.addEventListener('load', function() {
   // UPDATING THE MARKET AND BUDGET SUMMARIES
   
   MARKETSOLUTION = solveMarket(alpha, beta, gamma, L, w, p);
+  MARKETSOLUTIONPATH = MARKETSOLUTION.solution_path;
   console.log(MARKETSOLUTION);
 
   market_summary_table_container.innerHTML = '';
@@ -105,7 +107,8 @@ window.addEventListener('load', function() {
         L = parseFloat(input_L.value);
        
         MARKETSOLUTION = solveMarket(alpha, beta, gamma, L, w, p);
-
+        MARKETSOLUTIONPATH = MARKETSOLUTION.solution_path;
+        
         market_summary_table_container.innerHTML = '';
         market_summary_table_container.appendChild(returnMarketSummaryTable(MARKETSOLUTION));
 
@@ -119,7 +122,7 @@ window.addEventListener('load', function() {
         showCentrallyPlannedSolution(CENTRALSOLUTION);
         
         EXXARR = returnExxArr(b, alpha, beta, gamma, L);
-        updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
+        updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, MARKETSOLUTIONPATH, CENTRALSOLUTION);
         
         // UPDATE SELECTED BOX
         selected_market_summary_table_container.innerHTML = '';
@@ -146,7 +149,8 @@ window.addEventListener('load', function() {
   EXXARR = returnExxArr(b, alpha, beta, gamma, L);
   SELECTED.x = b.data.range.x.min + 0.5*b.data.range.x.span;
   SELECTED.y = b.data.range.y.min + 0.5*b.data.range.y.span;
-  updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
+  //let GRADARR = returnGradExxArr(b, alpha, beta, gamma, L);
+  updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, MARKETSOLUTIONPATH, CENTRALSOLUTION);
 
   let keyIsPressed = false;
   
@@ -171,7 +175,7 @@ window.addEventListener('load', function() {
     if (k === 65) {
       SELECTED.x -= mag;
     }
-    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
+    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, MARKETSOLUTIONPATH, CENTRALSOLUTION);
     
     // UPDATE SELECTED BOX
     selected_market_summary_table_container.innerHTML = '';
@@ -196,7 +200,10 @@ window.addEventListener('load', function() {
     SELECTED.x = val.x;
     SELECTED.y = val.y;
     
-    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, 1, CENTRALSOLUTION);
+    //let GRADARR = returnGradExxArr(b, alpha, beta, gamma, L);
+    updateBox(b, MARKETSOLUTION, EXXARR, SELECTED, MARKETSOLUTIONPATH, CENTRALSOLUTION, 1);
+    
+    
     
     // UPDATE SELECTED BOX
     selected_market_summary_table_container.innerHTML = '';

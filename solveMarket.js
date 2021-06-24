@@ -1,7 +1,7 @@
 
 function solveMarket(alpha, beta, gamma, L, w, p) {
 
- let dp = 0.1; // if you start too large, you will shoot right past the best region!!!! 
+ let dp = 1; //0.1; // if you start too large, you will shoot right past the best region!!!! 
  let m = [-1*dp, 0, 1*dp];
 
  let current_prices = [p[0], p[1]];

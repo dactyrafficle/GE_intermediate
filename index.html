@@ -29,6 +29,7 @@
  <script src='returnFirmIncomeSummaryTable.js'></script>
  
  <script src='returnExxArr.js'></script>
+ <script src='returnGradExxArr.js'></script>
  <script src='Box.js'></script>
  <script src='updateBox.js'></script>
  <script src='ge_central_planner.js'></script>
@@ -147,6 +148,26 @@
 </div>
 
 </div>
+
+
+<div class='section'>
+
+<p> So the solution to this problem seems to be (from <a target='_blank' href='https://economics.stackexchange.com/questions/45556/ge-with-an-intermediate-good'>here)</a>: </p>
+
+<p><span class='math'>p_1y_1 - y_1(wR^{\beta-1} + p_0R^{\beta}) + p_0</span>, where <span class='math'>R=\dfrac{(1-\beta)w}{\beta p_0}</span></p>
+
+<p> But it means firm1 commits to following the expansion path </p>
+
+<p> sub the expansion-ratios into the production function to get z=f(y) and k=f(y) </p>
+
+<p> and if we follow that thru to the profit function, we can solve for p1 in terms of p0, and it get us to an allocation that coincides with the central planner's allocation.</p>
+
+<p> but that is mysterious to me. as opposed to a firm taking a price as given, and making a choice to hire along the expansion path, then when they run out of one good, resorting to a single variable max problem. that seems to make more sense in the spirit of the firm taking the price as given. </p> 
+
+<p> and what about all the other vectors that work? (the orange line)</p>
+
+</div>
+
 
 <div class='section'>
 <div class='sub-section'>
